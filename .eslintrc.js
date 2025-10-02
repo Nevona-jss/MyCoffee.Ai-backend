@@ -1,0 +1,77 @@
+module.exports = {
+  env: {
+    node: true,
+    es2021: true,
+  },
+  extends: [
+    'eslint:recommended',
+  ],
+  parserOptions: {
+    ecmaVersion: 2021,
+    sourceType: 'module',
+  },
+  root: true,
+  ignorePatterns: ['.eslintrc.js', 'node_modules/', 'dist/'],
+  rules: {
+    // Basic rules - mostly warnings instead of errors
+    'no-console': 'off', // Allow console.log in development
+    'no-debugger': 'warn',
+    'no-unused-vars': 'warn',
+    'no-undef': 'error',
+    
+    // Style rules - relaxed
+    'semi': ['warn', 'always'],
+    'quotes': ['warn', 'single', { 'avoidEscape': true }],
+    'indent': ['warn', 2],
+    'comma-dangle': ['warn', 'always-multiline'],
+    'object-curly-spacing': ['warn', 'always'],
+    'array-bracket-spacing': ['warn', 'never'],
+    
+    // Code quality - warnings only
+    'prefer-const': 'warn',
+    'no-var': 'warn',
+    'eqeqeq': 'warn',
+    'curly': 'warn',
+    
+    // Disable strict rules
+    'no-trailing-spaces': 'off',
+    'eol-last': 'off',
+    'max-len': 'off',
+    'brace-style': 'off',
+    'space-before-function-paren': 'off',
+    'keyword-spacing': 'off',
+    'space-infix-ops': 'off',
+    'comma-spacing': 'off',
+    'key-spacing': 'off',
+    'func-call-spacing': 'off',
+    'computed-property-spacing': 'off',
+    'space-before-blocks': 'off',
+    'space-in-parens': 'off',
+    'space-unary-ops': 'off',
+    'spaced-comment': 'off',
+    'arrow-spacing': 'off',
+    'template-curly-spacing': 'off',
+    'object-shorthand': 'off',
+    'prefer-template': 'off',
+    'semi-spacing': 'off',
+    'no-multiple-empty-lines': 'off',
+    'no-mixed-spaces-and-tabs': 'off',
+    'no-tabs': 'off',
+    'no-eval': 'off',
+    'no-implied-eval': 'off',
+    'no-new-func': 'off',
+    'no-return-assign': 'off',
+    'no-self-compare': 'off',
+    'no-sequences': 'off',
+    'no-throw-literal': 'off',
+    'no-unmodified-loop-condition': 'off',
+    'no-unused-expressions': 'off',
+    'no-useless-call': 'off',
+    'no-useless-concat': 'off',
+    'no-useless-return': 'off',
+    'prefer-promise-reject-errors': 'off',
+    'radix': 'off',
+    'yoda': 'off',
+    'no-duplicate-imports': 'off',
+  },
+};
