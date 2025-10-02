@@ -15,46 +15,46 @@ const config = {
 
   // Database Configuration
   database: {
-    host: process.env.DB_HOST || 'db.jsdevdemo.com',
-    port: parseInt(process.env.DB_PORT || '7400', 10),
-    name: process.env.DB_NAME || 'COF',
-    username: process.env.DB_USERNAME || 'sadb',
-    password: process.env.DB_PASSWORD || 'jss0905!!',
+    host: process.env.DB_HOST ,
+    port: parseInt(process.env.DB_PORT, 10),
+    name: process.env.DB_NAME,
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
   },
 
   // JWT Configuration
   jwt: {
-    secret: process.env.JWT_SECRET || 'mycoffee-super-secret-jwt-key-2024-development',
-    expiresIn: process.env.JWT_EXPIRES_IN || '7d',
-    refreshSecret: process.env.JWT_REFRESH_SECRET || 'mycoffee-refresh-secret-key-2024',
-    refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '30d',
+    secret: process.env.JWT_SECRET,
+    expiresIn: process.env.JWT_EXPIRES_IN,
+    refreshSecret: process.env.JWT_REFRESH_SECRET,
+    refreshExpiresIn: process.env.JWT_REFRESH_EXPIsRES_IN,
   },
 
   // Redis Configuration
   redis: {
-    url: process.env.REDIS_URL || 'redis://localhost:6379',
-    host: process.env.REDIS_HOST || 'localhost',
-    port: parseInt(process.env.REDIS_PORT || '6379', 10),
-    password: process.env.REDIS_PASSWORD || undefined,
+    url: process.env.REDIS_URL,
+    host: process.env.REDIS_HOST,
+    port: parseInt(process.env.REDIS_PORT, 10),
+    password: process.env.REDIS_PASSWORD,
   },
 
   // AWS Configuration
   aws: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
-    region: process.env.AWS_REGION || 'ap-northeast-2',
-    s3Bucket: process.env.AWS_S3_BUCKET || 'mycoffee-uploads',
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: process.env.AWS_REGION,
+    s3Bucket: process.env.AWS_S3_BUCKET,
   },
 
   // OAuth Configuration
   oauth: {
     kakao: {
-      clientId: process.env.KAKAO_CLIENT_ID || '',
+      clientId: process.env.KAKAO_CLIENT_ID,
       clientSecret: process.env.KAKAO_CLIENT_SECRET || '',
       redirectUri: process.env.KAKAO_REDIRECT_URI || 'http://localhost:3000/auth/kakao/callback',
     },
     naver: {
-      clientId: process.env.NAVER_CLIENT_ID || '',
+      clientId: process.env.NAVER_CLIENT_ID,
       clientSecret: process.env.NAVER_CLIENT_SECRET || '',
       redirectUri: process.env.NAVER_REDIRECT_URI || 'http://localhost:3000/auth/naver/callback',
     },
@@ -66,27 +66,27 @@ const config = {
       redirectUri: process.env.APPLE_REDIRECT_URI || 'http://localhost:3000/auth/apple/callback',
     },
     google: {
-      clientId: process.env.GOOGLE_CLIENT_ID || '1034654341773-2tdl0gsa6sgpam3reda27rpnl88ulqlr.apps.googleusercontent.com',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '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',
-      redirectUri: process.env.GOOGLE_REDIRECT_URI || 'http://localhost:3000/auth/google/callback',
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      redirectUri: process.env.GOOGLE_REDIRECT_URI,
     },
   },
 
   // Payment Configuration
   payment: {
     tossPayments: {
-      secretKey: process.env.TOSS_PAYMENTS_SECRET_KEY || '',
-      clientKey: process.env.TOSS_PAYMENTS_CLIENT_KEY || '',
-      baseUrl: process.env.TOSS_PAYMENTS_BASE_URL || 'https://api.tosspayments.com',
+      secretKey: process.env.TOSS_PAYMENTS_SECRET_KEY,
+      clientKey: process.env.TOSS_PAYMENTS_CLIENT_KEY,
+      baseUrl: process.env.TOSS_PAYMENTS_BASE_URL,
     },
   },
 
   // Email Service Configuration
   email: {
-    service: process.env.EMAIL_SERVICE || 'gmail',
-    user: process.env.EMAIL_USER || '',
-    password: process.env.EMAIL_PASSWORD || '',
-    apiKey: process.env.EMAIL_SERVICE_API_KEY || '',
+    service: process.env.EMAIL_SERVICE,
+    user: process.env.EMAIL_USER,
+    password: process.env.EMAIL_PASSWORD,
+    apiKey: process.env.EMAIL_SERVICE_API_KEY,
   },
 
   // SMS Service Configuration
@@ -98,10 +98,10 @@ const config = {
 
   // Rate Limiting Configuration
   rateLimit: {
-    windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || '900000', 10), // 15 minutes
-    maxRequests: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '100', 10),
-    loginAttempts: parseInt(process.env.RATE_LIMIT_LOGIN_ATTEMPTS || '5', 10),
-    loginWindowMs: parseInt(process.env.RATE_LIMIT_LOGIN_WINDOW_MS || '900000', 10), // 15 minutes
+    windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS, 10), 
+    maxRequests: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS, 10),
+    loginAttempts: parseInt(process.env.RATE_LIMIT_LOGIN_ATTEMPTS , 10),
+    loginWindowMs: parseInt(process.env.RATE_LIMIT_LOGIN_WINDOW_MS, 10),
   },
 
   // File Upload Configuration
@@ -113,7 +113,7 @@ const config = {
 
   // CORS Configuration
   cors: {
-    origin: process.env.CORS_ORIGIN?.split(',') || ['http://localhost:3000', 'http://localhost:3001'],
+    origin: process.env.CORS_ORIGIN?.split(','),
     credentials: true,
   },
 
@@ -125,9 +125,9 @@ const config = {
 
   // Security Configuration
   security: {
-    bcryptRounds: parseInt(process.env.BCRYPT_ROUNDS || '12', 10),
-    sessionSecret: process.env.SESSION_SECRET || 'mycoffee-session-secret-2024',
-    cookieSecret: process.env.COOKIE_SECRET || 'mycoffee-cookie-secret-2024',
+    bcryptRounds: parseInt(process.env.BCRYPT_ROUNDS, 10),
+    sessionSecret: process.env.SESSION_SECRET,
+    cookieSecret: process.env.COOKIE_SECRET,
   },
 };
 
