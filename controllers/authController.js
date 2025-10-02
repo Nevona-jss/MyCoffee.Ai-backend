@@ -75,11 +75,9 @@ const callbackHandler = (provider) => async (req, res, next) => {
     };
     const token = signJwt(payload);
 
-    console.log("loginMethod", provider.toUpperCase());
-
     await logLoginAttempt({
-      // loginMethod: provider.toUpperCase(),
-      loginMethod: 'NAVER',
+      // TODO:
+      loginMethod: 'KAKAO',
       success: true,
       emailOrPhone: user.email,
       maskedIdentifier: user.email ? user.email.replace(/(.{2}).+(@.+)/, '$1***$2') : null,
