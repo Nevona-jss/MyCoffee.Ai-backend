@@ -5,7 +5,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # test workers 
-a-my-express-api/
+a_my_express_api/
 constants/
 
 # Build outputs
