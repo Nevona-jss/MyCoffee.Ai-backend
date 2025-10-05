@@ -1,8 +1,15 @@
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
-const { ApiResponse } = require('../utils');
+const { ApiResponse, AppError } = require('../utils');
+const { normalizeInput } = require('../utils/helpers');
+const authModel = require('../models/auth');
 const db = require('../config/database');
 const { config } = require('../config/environment');
+
+/**
+ * Auth Controller
+ * Handles user authentication (OAuth and Email) and password management operations
+ */
 
 const signJwt = (payload) => {
   return jwt.sign(payload, config.jwt.secret, { expiresIn: config.jwt.expiresIn });
@@ -47,7 +54,8 @@ const logLoginAttempt = async ({
   } catch (e) {
     console.error('Login logging failed', e);
   }
-}; 
+};
+
 const callbackHandler = (provider) => async (req, res, next) => {
   const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
   const ua = req.headers['user-agent'];
@@ -92,7 +100,166 @@ const callbackHandler = (provider) => async (req, res, next) => {
   })(req, res, next);
 };
 
+/**
+ * Email login authentication
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
+const emailLogin = async (req, res) => {
+  try {
+    const {
+      email,
+      password,
+      auto_login,
+      ip_address,
+      user_agent,
+      device_type,
+      device_id,
+      app_version,
+    } = req.body;
+
+    // Basic validation
+    if (!email) {
+      throw AppError.validationError('Email is required.');
+    }
+    if (!password) {
+      throw AppError.validationError('Password is required.');
+    }
+
+    // Prepare login data
+    const loginData = {
+      email: normalizeInput(email),
+      password,
+      auto_login: auto_login || false,
+      ip_address: ip_address || req.ip,
+      user_agent: user_agent || req.headers['user-agent'],
+      device_type,
+      device_id,
+      app_version,
+    };
+
+    const result = await authModel.emailLogin(loginData);
+
+    // Return procedure output exactly as-is (matching original format)
+    return res.status(200).json({
+      p_user_id: result.p_user_id,
+      p_session_id: result.p_session_id,
+      p_result_code: result.p_result_code,
+      p_result_message: result.p_result_message,
+    });
+
+  } catch (error) {
+    console.error('❌ /email/login error:', error);
+    // Return error in same format as procedure (matching original)
+    return res.status(200).json({
+      p_user_id: null,
+      p_session_id: null,
+      p_result_code: 'ERROR',
+      p_result_message: error.message,
+    });
+  }
+};
+
+/**
+ * Verify password reset (step 1 - identity verification)
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
+const verifyPasswordReset = async (req, res) => {
+  try {
+    const { email_or_username, phone_number, verification_code } = req.body;
+
+    // Basic validation
+    if (!email_or_username) {
+      throw AppError.validationError('Email or username is required.');
+    }
+    if (!phone_number) {
+      throw AppError.validationError('Phone number is required.');
+    }
+    if (!verification_code) {
+      throw AppError.validationError('Verification code is required.');
+    }
+
+    // Prepare verification data
+    const verifyData = {
+      email_or_username: normalizeInput(email_or_username),
+      phone_number: normalizeInput(phone_number),
+      verification_code: normalizeInput(verification_code),
+    };
+
+    const result = await authModel.verifyPasswordReset(verifyData);
+
+    // Return procedure output exactly as-is (matching original format)
+    return res.status(200).json({
+      p_reset_token: result.p_reset_token,
+      p_user_id: result.p_user_id,
+      p_masked_email: result.p_masked_email,
+      p_result_code: result.p_result_code,
+      p_result_message: result.p_result_message,
+    });
+
+  } catch (error) {
+    console.error('❌ /auth/verify-reset error:', error);
+    // Return error in same format as procedure (matching original)
+    return res.status(200).json({
+      p_reset_token: null,
+      p_user_id: null,
+      p_masked_email: null,
+      p_result_code: 'ERROR',
+      p_result_message: error.message,
+    });
+  }
+};
+
+/**
+ * Set new password (step 2 - password reset)
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
+const setNewPassword = async (req, res) => {
+  try {
+    const { reset_token, new_password, new_password_confirm } = req.body;
+
+    // Basic validation
+    if (!reset_token) {
+      throw AppError.validationError('Reset token is required.');
+    }
+    if (!new_password) {
+      throw AppError.validationError('New password is required.');
+    }
+    if (!new_password_confirm) {
+      throw AppError.validationError('Password confirmation is required.');
+    }
+
+    // Prepare password data
+    const passwordData = {
+      reset_token,
+      new_password,
+      new_password_confirm,
+    };
+
+    const result = await authModel.setNewPassword(passwordData);
+
+    // Return procedure output exactly as-is (matching original format)
+    return res.status(200).json({
+      p_user_id: result.p_user_id,
+      p_result_code: result.p_result_code,
+      p_result_message: result.p_result_message,
+    });
+
+  } catch (error) {
+    console.error('❌ /auth/set-new-password error:', error);
+    // Return error in same format as procedure (matching original)
+    return res.status(200).json({
+      p_user_id: null,
+      p_result_code: 'ERROR',
+      p_result_message: error.message,
+    });
+  }
+};
+
 module.exports = {
+  // OAuth methods (existing)
   kakaoAuth: passport.authenticate('kakao', { session: false, scope: ['account_email', 'profile_nickname'] }),
   kakaoCallback: callbackHandler('kakao'),
   naverAuth: passport.authenticate('naver', { session: false }),
@@ -101,6 +268,9 @@ module.exports = {
   appleCallback: callbackHandler('apple'),
   googleAuth: passport.authenticate('google', { session: false, scope: ['profile', 'email', 'openid'] }),
   googleCallback: callbackHandler('google'),
+  
+  // New auth methods
+  emailLogin,
+  verifyPasswordReset,
+  setNewPassword,
 };
-
-

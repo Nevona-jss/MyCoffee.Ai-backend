@@ -15,7 +15,8 @@ try {
   process.exit(1);
 }
 
-const PORT = config.server.port;
+// const PORT = config.server.port ;
+const PORT = 3000;
 
 // Initialize database connection
 const initDatabase = async () => {
@@ -31,10 +32,8 @@ const initDatabase = async () => {
 // Start server
 const server = app.listen(PORT, async () => {
   console.log(`🚀 MyCoffee.Ai API Server running on port ${PORT}`);
-  console.log(`📱 Environment: ${config.server.nodeEnv}`);
-  console.log(`🔗 Health check: http://localhost:${PORT}/health`);
-  console.log(`📚 API docs: http://localhost:${PORT}/api`);
-  console.log(`🗄️  Test DB: http://localhost:${PORT}/test-db`);
+  console.log(`📱 Environment: ${config.server.nodeEnv}`); 
+  console.log(`📚 API docs: http://localhost:${PORT}/api`); 
   
   // Initialize database
   await initDatabase();

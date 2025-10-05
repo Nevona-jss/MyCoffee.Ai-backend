@@ -7,6 +7,26 @@ const {
   PREFERENCE_SCORE,
 } = require('./constants');
 
+/**
+ * Normalize and validate input values
+ * Converts strings to integers, handles null/undefined values
+ * @param {any} value - Input value to normalize
+ * @returns {number|null} - Normalized integer or null
+ */
+const normalizeInput = (value) => {
+  if (value === undefined || value === null) return null;
+  
+  if (typeof value === 'string') {
+    const trimmed = value.trim();
+    if (trimmed === '') return null;
+    const num = Number(trimmed);
+    return Number.isFinite(num) ? Math.trunc(num) : null;
+  }
+  
+  const num = Number(value);
+  return Number.isFinite(num) ? Math.trunc(num) : null;
+};
+
 // Calculate preference similarity score
 const calculatePreferenceSimilarity = (
   userPreferences,
@@ -474,4 +494,5 @@ module.exports = {
   throttle,
   retry,
   generateCoffeeRecommendations,
+  normalizeInput,
 };
