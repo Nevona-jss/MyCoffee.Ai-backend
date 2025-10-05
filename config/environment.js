@@ -98,10 +98,10 @@ const config = {
 
   // Rate Limiting Configuration
   rateLimit: {
-    windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS, 10), 
+    windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS, 10),  // 15 minute
     maxRequests: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS, 10),
     loginAttempts: parseInt(process.env.RATE_LIMIT_LOGIN_ATTEMPTS , 10),
-    loginWindowMs: parseInt(process.env.RATE_LIMIT_LOGIN_WINDOW_MS, 10),
+    loginWindowMs: parseInt(process.env.RATE_LIMIT_LOGIN_WINDOW_MS, 10), 
   },
 
   // File Upload Configuration

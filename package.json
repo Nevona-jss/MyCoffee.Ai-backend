@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js",
+    "dev": "nodemon --delay 500ms app.js",
     "lint": "eslint . --ext .js",
     "lint:fix": "eslint . --ext .js --fix"
   },
@@ -35,7 +35,7 @@
     "passport-naver-v2": "^2.0.8",
     "redis": "^4.6.10",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.0"
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "eslint": "^8.54.0",

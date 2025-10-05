@@ -6,8 +6,9 @@ const compression = require('compression');
 const rateLimit = require('express-rate-limit');
 const { config } = require('./config/environment');
 const { ApiResponse } = require('./utils');
-const passport = require('./middlewares/passport');
-const authRoutes = require('./routes/auth');
+const passport = require('./middlewares/passport'); 
+const { routes } = require('./routes');
+const { swaggerUi, specs } = require('./swagger/swagger');
 
 const app = express();
 
@@ -36,38 +37,28 @@ app.use(morgan(config.logging.format));
 // Passport (stateless)
 app.use(passport.initialize());
 
-
-// test endpoint to check if db is connected
-// Test database connection endpoint
-app.get('/test', async (req, res) => {
-  try {
-    const db = require('./config/database');
-    const result = await db.query('SELECT DB_NAME() as dbName, @@VERSION as dbVersion');
-    
-    ApiResponse.success(res, {
-      connected: true,
-      database: result.recordset[0]?.dbName,
-      version: result.recordset[0]?.dbVersion,
-    }, 'Database connected successfully');
-  } catch (error) {
-    ApiResponse.error(res, 'Database connection failed', 500, error);
-  }
-});
+// Swagger API Documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, {
+  explorer: true,
+  customCss: '.swagger-ui .topbar { display: none }',
+  customSiteTitle: 'MyCoffee.Ai API Documentation',
+}));
 
 // API routes placeholder
 app.get('/api', (req, res) => {
   ApiResponse.success(res, {
     message: 'Welcome to MyCoffee.Ai API',
     version: '1.0.0',
-    endpoints: {
-      health: '/health',
-      api: '/api',
+    endpoints: {  
+      docs: '/api-docs',
     },
   }, 'API is ready');
 });
 
-// Auth routes
-app.use('/auth', authRoutes);
+// All routes 
+routes.map((route) => {
+  app.use(route.path, route.routes);
+});
 
 // 404 handler
 app.use('*', (req, res) => {
